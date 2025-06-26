@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Summary</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .resume {
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+    }
+    .left-column {
+      background-color: #212529;
+      color: white;
+      width: 35%;
+      padding: 25px;
+    }
+    .right-column {
+      width: 65%;
+      padding: 25px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      margin-top: 25px;
+    }
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .cert-item {
+      margin-bottom: 10px;
+    }
+    .cert-title {
+      font-weight: bold;
+      color: #0d6efd;
+      text-decoration: none;
+    }
+    .cert-meta {
+      font-size: 14px;
+      color: #555;
+    }
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .btn {
+        display: none !important;
+      }
+    }
+    a {
+      color: #0dcaf0;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="resume">
+  <!-- Left Column -->
+  <div class="left-column">
+    <div class="text-center mb-4">
+      <div class="name" id="name">Your Name</div>
+      <div id="position" style="font-size: 14px;">Aspiring Developer</div>
+    </div>
+    <div class="contact">
+      <div class="section-title">Contact</div>
+      <p><i class="bi bi-envelope-fill"></i> <span id="email"></span></p>
+      <p><i class="bi bi-telephone-fill"></i> <span id="phone"></span></p>
+      <p><i class="bi bi-github"></i> <a href="#" id="github" target="_blank">GitHub</a></p>
+      <p><i class="bi bi-linkedin"></i> <a href="#" id="linkedin" target="_blank">LinkedIn</a></p>
+    </div>
+    <div class="objective">
+      <div class="section-title">Objective</div>
+      <p id="objective-text"></p>
+    </div>
+    <div class="skills">
+      <div class="section-title">Skills</div>
+      <ul id="skills-list"></ul>
+    </div>
+    <div class="interests">
+      <div class="section-title">Interests</div>
+      <ul id="interests-list"></ul>
+    </div>
+    <div class="languages">
+      <div class="section-title">Languages</div>
+      <ul id="languages-list"></ul>
+    </div>
+  </div>
+
+  <!-- Right Column -->
+  <div class="right-column">
+    <div class="education">
+      <div class="section-title">Education</div>
+      <div id="education-details"></div>
+    </div>
+
+    <div class="experience">
+      <div class="section-title">Experience</div>
+      <div id="experience-details"></div>
+    </div>
+
+    <div class="projects">
+      <div class="section-title">Projects</div>
+      <div id="project-details"></div>
+    </div>
+
+    <div class="certs-achievements">
+      <div class="section-title">Certifications & Achievements</div>
+      <div id="certs-achievements-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center mt-4">
+  <button onclick="printAndReset()" class="btn btn-dark">🖨️ Print & Reset</button>
+</div>
+
+<script>
+  const personal = JSON.parse(localStorage.getItem("personalDetails")) || {};
+  const education = JSON.parse(localStorage.getItem("educationDetails")) || {};
+  const experience = JSON.parse(localStorage.getItem("experienceDetails")) || [];
+  const projects = JSON.parse(localStorage.getItem("projectDetails")) || [];
+  const extra = JSON.parse(localStorage.getItem("extraDetails")) || {};
+  const certs = JSON.parse(localStorage.getItem("certificationsAchievements")) || [];
+
+  // Personal Info
+  document.getElementById("name").textContent = `${personal.firstname || ''} ${personal.lastname || ''}`;
+  document.getElementById("email").textContent = personal.email || '';
+  document.getElementById("phone").textContent = personal.phonenumber || '';
+  document.getElementById("github").href = personal.github || '#';
+  document.getElementById("github").textContent = "GitHub";
+  document.getElementById("linkedin").href = personal.linkedin || '#';
+  document.getElementById("linkedin").textContent = "LinkedIn";
+  document.getElementById("position").textContent = personal.position || 'Aspiring Developer';
+  document.getElementById("objective-text").textContent = personal.objective || '';
+
+  // Skills
+  (extra.skill || []).forEach(skill => {
+    const li = document.createElement("li");
+    li.textContent = skill;
+    document.getElementById("skills-list").appendChild(li);
+  });
+
+  // Interests
+  (extra.interest || []).forEach(interest => {
+    const li = document.createElement("li");
+    li.textContent = interest;
+    document.getElementById("interests-list").appendChild(li);
+  });
+
+  // Languages
+  (extra.language || []).forEach(language => {
+    const li = document.createElement("li");
+    li.textContent = language;
+    document.getElementById("languages-list").appendChild(li);
+  });
+
+  // Education
+  const educationDiv = document.getElementById("education-details");
+  if (education.cqualification) {
+    educationDiv.innerHTML += `<p><strong>${education.cqualification}</strong><br>${education.collegeuniversity} (${education.cfromyear} - ${education.ctoyear})<br>${education.cdescription || ''}</p>`;
+  }
+  if (education.squalification) {
+    educationDiv.innerHTML += `<p><strong>${education.squalification}</strong><br>${education.school} (${education.sfromyear} - ${education.stoyear})<br>${education.sdescription || ''}</p>`;
+  }
+
+  // Experience
+  const experienceDiv = document.getElementById("experience-details");
+  experience.forEach(exp => {
+    experienceDiv.innerHTML += `<p><strong>${exp.position}</strong> at ${exp.instituteorganization} (${exp.duration})<br>${exp.description || ''}</p>`;
+  });
+
+  // Projects
+  const projectDiv = document.getElementById("project-details");
+  projects.forEach(project => {
+    projectDiv.innerHTML += `<p><strong>${project.title}</strong><br>${project.link ? `<a href="${project.link}" target="_blank">${project.link}</a><br>` : ''}${project.description || ''}</p>`;
+  });
+
+  // Certifications & Achievements
+  const certsContainer = document.getElementById("certs-achievements-list");
+  certs.forEach(cert => {
+    const div = document.createElement("div");
+    div.className = "cert-item";
+
+    const titleHTML = cert.link && cert.link.trim() !== ""
+      ? `<a href="${cert.link}" target="_blank" class="cert-title">${cert.title}</a>`
+      : `<span class="cert-title">${cert.title}</span>`;
+
+    const issuerYear = [cert.issuer, cert.year].filter(Boolean).join(", ");
+    const metaHTML = issuerYear ? `<div class="cert-meta">${issuerYear}</div>` : "";
+
+    div.innerHTML = `${titleHTML}${metaHTML}`;
+    certsContainer.appendChild(div);
+  });
+  
+ function printAndReset() {
+    window.print();
+
+    // Wait a moment after print to ensure it opens before clearing
+    setTimeout(() => {
+      localStorage.clear(); // Clear all saved data silently
+      window.location.href = "PersonalDetails.html";
+    }, 1000);
+  }
+</script>
+</body>
+</html>
+

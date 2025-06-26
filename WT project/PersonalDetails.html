@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Details - Resume Builder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+    .form-control {
+      border-radius: 5px;
+    }
+    .input-group-text {
+      background-color: #f8f9fa;
+      border-right: none;
+    }
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: none;
+    }
+    .btn-custom {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form id="personalForm">
+    <div class="container">
+      <h3 class="text-center mb-4">Personal Details</h3>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">First Name *</label>
+          <input type="text" name="firstname" class="form-control" placeholder="Enter first name" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Last Name *</label>
+          <input type="text" name="lastname" class="form-control" placeholder="Enter last name" required>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Email *</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+            <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Phone Number</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa fa-phone"></i></span>
+            <input type="text" name="phonenumber" class="form-control" placeholder="Enter phone number">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">GitHub</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa fa-github"></i></span>
+            <input type="url" name="github" class="form-control" placeholder="Enter GitHub profile">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">LinkedIn</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa fa-linkedin"></i></span>
+            <input type="url" name="linkedin" class="form-control" placeholder="Enter LinkedIn profile">
+          </div>
+        </div>
+
+        <!-- Objective Section -->
+        <div class="col-12">
+          <label class="form-label">Objective</label>
+          <textarea name="objective" class="form-control" rows="4" placeholder="Enter your career objective"></textarea>
+        </div>
+      </div>
+
+      <!-- Back and Next Buttons -->
+      <div class="button-group">
+        <button class="btn btn-secondary btn-custom" disabled>
+          <i class="fa fa-arrow-left"></i> BACK
+        </button>
+        <button class="btn btn-primary btn-custom" type="submit">
+          NEXT <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <p class="text-center mt-3">Page 1</p>
+    </div>
+    <div id="result"></div>
+  </form>
+
+  <script>
+    document.getElementById("personalForm").onsubmit = function(e) {
+      e.preventDefault();
+      const firstname = e.target.firstname.value;
+      const lastname = e.target.lastname.value;
+      const email = e.target.email.value;
+      const phonenumber = e.target.phonenumber.value;
+      const github = e.target.github.value;
+      const linkedin = e.target.linkedin.value;
+      const objective = e.target.objective.value;
+
+      localStorage.setItem("personalDetails", JSON.stringify({
+        firstname,
+        lastname,
+        email,
+        phonenumber,
+        github,
+        linkedin,
+        objective
+      }));
+
+      window.location.href = "EducationDetails.html";
+    };
+    
+    window.onload = function() {
+    const data = JSON.parse(localStorage.getItem("personalDetails")) || {};
+    const form = document.forms["personalForm"];
+    for (let key in data) {
+      if (form[key]) form[key].value = data[key];
+    }
+  };
+  </script>
+</body>
+</html>
+
